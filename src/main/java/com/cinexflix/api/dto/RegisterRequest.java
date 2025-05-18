@@ -15,4 +15,9 @@ public class RegisterRequest {
     private Date fechaNacimiento;
     private String telefono;
     private String foto;
+
+    private String plan_seleccionado;
+    private String modalidad_plan;
+    private Date fecha_inicio_plan;
+    private Date fecha_fin_plan;
 }

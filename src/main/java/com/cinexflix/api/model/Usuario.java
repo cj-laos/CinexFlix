@@ -2,17 +2,21 @@ package com.cinexflix.api.model;
 
 import lombok.Data;
 import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
+
 import java.util.Date;
 
-@Data  // Lombok genera getters, setters, toString(), equals() y hashCode()
-@AllArgsConstructor  // Lombok genera un constructor con todos los parámetros
-@Document(collection = "usuarios")
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
+@Document(collection = "usuarios_new")
 public class Usuario {
 
     @Id
-    private String id;  // MongoDB generará automáticamente el ID
+    private String id;
+
     private String nombre;
     private String apellidos;
     private String email;
@@ -22,18 +26,11 @@ public class Usuario {
     private String telefono;
     private String foto;
 
-    public Usuario() {
-    }
-     // Constructor con todos los parámetros
-     public Usuario(String nombre, String apellidos, String email, String contrasena, Date fechaNacimiento, Date fechaCreacionCuenta, String telefono, String foto) {
-        this.nombre = nombre;
-        this.apellidos = apellidos;
-        this.email = email;
-        this.contrasena = contrasena;
-        this.fechaNacimiento = fechaNacimiento;
-        this.fechaCreacionCuenta = fechaCreacionCuenta;
-        this.telefono = telefono;
-        this.foto = foto;
-    }
-}
+    // Nuevos campos para plan de suscripción
+    private String plan_seleccionado;
+    private String modalidad_plan;
+    private Date fecha_inicio_plan;
+    private Date fecha_fin_plan;
 
+    private String rol = "USER"; // ← Aquí está el rol
+}

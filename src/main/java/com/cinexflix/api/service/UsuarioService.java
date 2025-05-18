@@ -7,7 +7,9 @@ import org.springframework.stereotype.Service;
 import com.cinexflix.api.model.Usuario;
 import com.cinexflix.api.repository.UsuarioRepository;
 
+import java.util.Calendar;
 import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.Optional;
 
@@ -19,30 +21,69 @@ public class UsuarioService {
 
     private BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
-    public Usuario registrarUsuario(String nombre, String apellidos, String email, String contrasena, Date fechaNacimiento, String telefono, String foto) {
-        // Encriptar la contraseña
+    // Registrar nuevo usuario con plan, calculando fechas automáticamente
+    public Usuario registrarUsuario(
+            String nombre,
+            String apellidos,
+            String email,
+            String contrasena,
+            Date fechaNacimiento,
+            String telefono,
+            String foto,
+            String planSeleccionado,
+            String modalidadPlan
+    ) {
         String contrasenaEncriptada = passwordEncoder.encode(contrasena);
 
-        // Crear el usuario con la fecha de creación
-        Usuario usuario = new Usuario(nombre, apellidos, email, contrasenaEncriptada, fechaNacimiento, new Date(), telefono, foto);
+        Date fechaInicioPlan = new Date(); // fecha actual
 
-        // Guardar el usuario en la base de datos
+        Calendar calendar = GregorianCalendar.getInstance();
+        calendar.setTime(fechaInicioPlan);
+
+        if ("anual".equalsIgnoreCase(modalidadPlan)) {
+            calendar.add(Calendar.YEAR, 1);
+        } else if ("mensual".equalsIgnoreCase(modalidadPlan)) {
+            calendar.add(Calendar.MONTH, 1);
+        } else {
+            // Por si se recibe otra modalidad, pones 1 mes como default
+            calendar.add(Calendar.MONTH, 1);
+        }
+
+        Date fechaFinPlan = calendar.getTime();
+
+        Usuario usuario = new Usuario(
+                null,  // id generado por MongoDB
+                nombre,
+                apellidos,
+                email,
+                contrasenaEncriptada,
+                fechaNacimiento,
+                new Date(),  // fechaCreacionCuenta: hoy
+                telefono,
+                foto,
+                planSeleccionado,
+                modalidadPlan,
+                fechaInicioPlan,
+                fechaFinPlan,
+                rol 
+        );
+
         return usuarioRepository.save(usuario);
     }
 
+    // Obtener todos los usuarios
     public List<Usuario> obtenerTodos() {
         return usuarioRepository.findAll();
     }
-    
 
+    // Iniciar sesión sin JWT
     public Optional<Usuario> iniciarSesion(String email, String contrasena) {
-        // Buscar el usuario por el email
         Optional<Usuario> usuario = usuarioRepository.findByEmail(email);
 
-        // Si el usuario existe, verificar la contraseña
         if (usuario.isPresent() && passwordEncoder.matches(contrasena, usuario.get().getContrasena())) {
             return usuario;
         }
-        return Optional.empty();  // Si no se encuentra el usuario o la contraseña es incorrecta
+
+        return Optional.empty();
     }
 }

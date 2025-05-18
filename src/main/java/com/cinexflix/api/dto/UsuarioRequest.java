@@ -14,4 +14,9 @@ public class UsuarioRequest {
     private Date fechaNacimiento;
     private String telefono;
     private String foto;
+
+    private String plan_seleccionado;
+    private String modalidad_plan;
+    private String fecha_inicio_plan;
+    private String fecha_fin_plan;
 }
