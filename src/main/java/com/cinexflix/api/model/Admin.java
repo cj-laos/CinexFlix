@@ -26,6 +26,6 @@ public class Admin {
     private String apellidos;
     private Date fechaCreacionCuenta;
 
-    private String rol = "ADMIN"; // ← Aquí también
+    private String rol = "ADMIN"; // ← Aquí también 
 }
 // package com.cinexflix.api.model;

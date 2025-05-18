@@ -65,7 +65,7 @@ public class UsuarioService {
                 modalidadPlan,
                 fechaInicioPlan,
                 fechaFinPlan,
-                rol 
+                "USER" // Default role for a new user
         );
 
         return usuarioRepository.save(usuario);
