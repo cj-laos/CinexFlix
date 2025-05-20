@@ -17,6 +17,7 @@ public class Pelicula {
     private String id; // ej. "MOV123456"
     
     private String titulo;
+    private String portada;
     private String descripcion;
     private int duracion; // en minutos
     private int anio;
@@ -24,6 +25,8 @@ public class Pelicula {
     
     private List<String> actores;
     private List<String> directores;
+
+    private String youtubeUrl;
     
     private double rating;
 }

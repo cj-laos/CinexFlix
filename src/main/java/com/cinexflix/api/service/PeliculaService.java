@@ -26,7 +26,12 @@ public class PeliculaService {
         return peliculaRepository.findById(id);
     }
 
+    public boolean existePorId(String id) {
+        return peliculaRepository.existsById(id);
+    }
+
     public void eliminarPorId(String id) {
         peliculaRepository.deleteById(id);
     }
+
 }

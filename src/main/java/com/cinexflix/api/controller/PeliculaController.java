@@ -35,7 +35,30 @@ public class PeliculaController {
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> eliminarPorId(@PathVariable String id) {
+        if (!peliculaService.existePorId(id)) {
+            return ResponseEntity.notFound().build();
+        }
         peliculaService.eliminarPorId(id);
         return ResponseEntity.noContent().build();
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<Pelicula> actualizarPelicula(@PathVariable String id, @RequestBody Pelicula pelicula) {
+        return peliculaService.obtenerPorId(id)
+                .map(p -> {
+                    p.setTitulo(pelicula.getTitulo());
+                    p.setDescripcion(pelicula.getDescripcion());
+                    p.setDuracion(pelicula.getDuracion());
+                    p.setAnio(pelicula.getAnio());
+                    p.setCategoria(pelicula.getCategoria());
+                    p.setActores(pelicula.getActores());
+                    p.setDirectores(pelicula.getDirectores());
+                    p.setYoutubeUrl(pelicula.getYoutubeUrl());
+                    p.setRating(pelicula.getRating());
+                    p.setPortada(pelicula.getPortada());
+                    Pelicula actualizada = peliculaService.crearPelicula(p);
+                    return ResponseEntity.ok(actualizada);
+                })
+                .orElse(ResponseEntity.notFound().build());
     }
 }
