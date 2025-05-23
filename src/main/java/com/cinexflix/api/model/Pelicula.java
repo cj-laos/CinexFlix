@@ -25,8 +25,6 @@ public class Pelicula {
     
     private List<String> actores;
     private List<String> directores;
-
-    private String youtubeUrl;
     
     private double rating;
 }
