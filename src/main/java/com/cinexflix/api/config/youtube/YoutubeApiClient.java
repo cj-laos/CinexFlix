@@ -28,10 +28,58 @@ public class YoutubeApiClient {
         return instance;
     }
 
+    /*
+     * public String searchVideos(String query) throws IOException {
+     * String encodedQuery = URLEncoder.encode(query, "UTF-8");
+     * String urlString = baseUrl + "search?part=snippet&q=" + encodedQuery +
+     * "&type=video&key=" + apiKey;
+     * 
+     * URI uri = URI.create(urlString);
+     * URL url = uri.toURL();
+     * 
+     * HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+     * conn.setRequestMethod("GET");
+     * 
+     * int responseCode = conn.getResponseCode();
+     * if (responseCode != HttpURLConnection.HTTP_OK) {
+     * throw new IOException("Error en API de YouTube. Código: " + responseCode);
+     * }
+     * 
+     * try (BufferedReader reader = new BufferedReader(new
+     * InputStreamReader(conn.getInputStream()))) {
+     * return reader.lines().collect(Collectors.joining("\n"));
+     * }
+     * }
+     */
+
     public String searchVideos(String query) throws IOException {
         String encodedQuery = URLEncoder.encode(query, "UTF-8");
         String urlString = baseUrl + "search?part=snippet&q=" + encodedQuery + "&type=video&key=" + apiKey;
+        return executeGetRequest(urlString);
+    }
 
+    // Nuevo método para buscar playlists por ID de canal
+    public String getPlaylistsByChannel(String channelId) throws IOException {
+        String encodedChannelId = URLEncoder.encode(channelId, "UTF-8");
+        // part=snippet para obtener título, descripción, etc.
+        // channelId para especificar el canal
+        // maxResults para limitar el número de resultados (opcional, default es 5)
+        String urlString = baseUrl + "playlists?part=snippet&channelId=" + encodedChannelId + "&key=" + apiKey;
+        return executeGetRequest(urlString);
+    }
+
+    // Nuevo método para obtener los videos de una playlist
+    public String getPlaylistItems(String playlistId) throws IOException {
+        String encodedPlaylistId = URLEncoder.encode(playlistId, "UTF-8");
+        // part=snippet para obtener título, descripción, thumbnails
+        // part=contentDetails para obtener el videoId
+        // playlistId para especificar la playlist
+        String urlString = baseUrl + "playlistItems?part=snippet,contentDetails&playlistId=" + encodedPlaylistId
+                + "&key=" + apiKey;
+        return executeGetRequest(urlString);
+    }
+
+    private String executeGetRequest(String urlString) throws IOException {
         URI uri = URI.create(urlString);
         URL url = uri.toURL();
 
@@ -40,11 +88,12 @@ public class YoutubeApiClient {
 
         int responseCode = conn.getResponseCode();
         if (responseCode != HttpURLConnection.HTTP_OK) {
-            throw new IOException("Error en API de YouTube. Código: " + responseCode);
+            throw new IOException("Error en API de YouTube. Código: " + responseCode + ". URL: " + urlString);
         }
 
         try (BufferedReader reader = new BufferedReader(new InputStreamReader(conn.getInputStream()))) {
             return reader.lines().collect(Collectors.joining("\n"));
         }
     }
+
 }

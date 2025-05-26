@@ -17,4 +17,5 @@ public class YoutubeConfig {
     public YoutubeApiClient youtubeApiClient() {
         return YoutubeApiClient.getInstance(apiKey, baseUrl);
     }
+
 }
