@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import com.cinexflix.api.dto.UsuarioRequest;
 import com.cinexflix.api.model.Usuario;
 import com.cinexflix.api.repository.UsuarioRepository;
 
@@ -86,4 +87,35 @@ public class UsuarioService {
 
         return Optional.empty();
     }
+
+    public Optional<Usuario> actualizarDatosBasicos(String id, UsuarioRequest usuarioRequest) {
+    Optional<Usuario> usuarioOptional = usuarioRepository.findById(id);
+
+    if (usuarioOptional.isEmpty()) {
+        return Optional.empty();
+    }
+
+    Usuario usuario = usuarioOptional.get();
+
+    // Validar si se quiere actualizar el email
+    if (usuarioRequest.getEmail() != null && !usuarioRequest.getEmail().equals(usuario.getEmail())) {
+        Optional<Usuario> usuarioConEmail = usuarioRepository.findByEmail(usuarioRequest.getEmail());
+        if (usuarioConEmail.isPresent() && !usuarioConEmail.get().getId().equals(id)) {
+            return Optional.empty(); // Email en uso por otro usuario
+        }
+        usuario.setEmail(usuarioRequest.getEmail());
+    }
+
+    // Actualizar solo los campos permitidos
+    if (usuarioRequest.getNombre() != null) usuario.setNombre(usuarioRequest.getNombre());
+    if (usuarioRequest.getApellidos() != null) usuario.setApellidos(usuarioRequest.getApellidos());
+    if (usuarioRequest.getFoto() != null) usuario.setFoto(usuarioRequest.getFoto());
+    if (usuarioRequest.getTelefono() != null) usuario.setTelefono(usuarioRequest.getTelefono());
+    if (usuarioRequest.getContrasena() != null) usuario.setContrasena(usuarioRequest.getContrasena());    
+{
+        usuario.setContrasena(passwordEncoder.encode(usuarioRequest.getContrasena()));
+    }
+    return Optional.of(usuarioRepository.save(usuario));
+}
+
 }

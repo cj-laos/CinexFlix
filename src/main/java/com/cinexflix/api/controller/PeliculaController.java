@@ -53,7 +53,6 @@ public class PeliculaController {
                     p.setCategoria(pelicula.getCategoria());
                     p.setActores(pelicula.getActores());
                     p.setDirectores(pelicula.getDirectores());
-                    p.setYoutubeUrl(pelicula.getYoutubeUrl());
                     p.setRating(pelicula.getRating());
                     p.setPortada(pelicula.getPortada());
                     Pelicula actualizada = peliculaService.crearPelicula(p);
