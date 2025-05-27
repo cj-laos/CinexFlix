@@ -18,10 +18,11 @@ public class SesionService {
     private SesionRepository sesionRepository;
 
     public Sesion registrarInicioSesion(SesionRequest request) {
-        Sesion sesion = new Sesion();
-        sesion.setUserId(request.getUserId());
-        sesion.setInicioSesion(new Date());
-        sesion.setFinSesion(null);
+        Sesion sesion = Sesion.builder()
+                .userId(request.getUserId())
+                .inicioSesion(new Date())
+                .finSesion(null)
+                .build();
         return sesionRepository.save(sesion);
     }
 

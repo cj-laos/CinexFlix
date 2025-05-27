@@ -28,30 +28,6 @@ public class YoutubeApiClient {
         return instance;
     }
 
-    /*
-     * public String searchVideos(String query) throws IOException {
-     * String encodedQuery = URLEncoder.encode(query, "UTF-8");
-     * String urlString = baseUrl + "search?part=snippet&q=" + encodedQuery +
-     * "&type=video&key=" + apiKey;
-     * 
-     * URI uri = URI.create(urlString);
-     * URL url = uri.toURL();
-     * 
-     * HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-     * conn.setRequestMethod("GET");
-     * 
-     * int responseCode = conn.getResponseCode();
-     * if (responseCode != HttpURLConnection.HTTP_OK) {
-     * throw new IOException("Error en API de YouTube. Código: " + responseCode);
-     * }
-     * 
-     * try (BufferedReader reader = new BufferedReader(new
-     * InputStreamReader(conn.getInputStream()))) {
-     * return reader.lines().collect(Collectors.joining("\n"));
-     * }
-     * }
-     */
-
     public String searchVideos(String query) throws IOException {
         String encodedQuery = URLEncoder.encode(query, "UTF-8");
         String urlString = baseUrl + "search?part=snippet&q=" + encodedQuery + "&type=video&key=" + apiKey;
