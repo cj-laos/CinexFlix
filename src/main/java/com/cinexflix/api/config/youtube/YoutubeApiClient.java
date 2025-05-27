@@ -34,22 +34,14 @@ public class YoutubeApiClient {
         return executeGetRequest(urlString);
     }
 
-    // Nuevo método para buscar playlists por ID de canal
     public String getPlaylistsByChannel(String channelId) throws IOException {
         String encodedChannelId = URLEncoder.encode(channelId, "UTF-8");
-        // part=snippet para obtener título, descripción, etc.
-        // channelId para especificar el canal
-        // maxResults para limitar el número de resultados (opcional, default es 5)
         String urlString = baseUrl + "playlists?part=snippet&channelId=" + encodedChannelId + "&key=" + apiKey;
         return executeGetRequest(urlString);
     }
 
-    // Nuevo método para obtener los videos de una playlist
     public String getPlaylistItems(String playlistId) throws IOException {
         String encodedPlaylistId = URLEncoder.encode(playlistId, "UTF-8");
-        // part=snippet para obtener título, descripción, thumbnails
-        // part=contentDetails para obtener el videoId
-        // playlistId para especificar la playlist
         String urlString = baseUrl + "playlistItems?part=snippet,contentDetails&playlistId=" + encodedPlaylistId
                 + "&key=" + apiKey;
         return executeGetRequest(urlString);
