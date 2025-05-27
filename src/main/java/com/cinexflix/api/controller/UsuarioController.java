@@ -66,7 +66,4 @@ public class UsuarioController {
                     .body("El correo ya está en uso por otro usuario o el usuario no existe.");
         }
     }
-
-    
-
 }
