@@ -38,4 +38,16 @@ public class SerieController {
         serieService.eliminarPorId(id);
         return ResponseEntity.noContent().build();
     }
+
+    @PostMapping("/{id}/temporadas")
+    public ResponseEntity<Serie> agregarTemporada(@PathVariable String id, @RequestBody Serie.Temporada temporada) {
+        Serie serieActualizada = serieService.agregarTemporada(id, temporada);
+        return ResponseEntity.ok(serieActualizada);
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<Serie> actualizarSerie(@PathVariable String id, @RequestBody Serie serieActualizada) {
+        return ResponseEntity.ok(serieService.actualizarSerie(id, serieActualizada));
+    }
+
 }

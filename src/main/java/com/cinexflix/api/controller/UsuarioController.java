@@ -22,21 +22,19 @@ public class UsuarioController {
     private UsuarioService usuarioService;
 
     // Registro de usuario
-@PostMapping("/registro")
-public Usuario registrarUsuario(@RequestBody UsuarioRequest usuarioRequest) {
-    return usuarioService.registrarUsuario(
-            usuarioRequest.getNombre(),
-            usuarioRequest.getApellidos(),
-            usuarioRequest.getEmail(),
-            usuarioRequest.getContrasena(),
-            usuarioRequest.getFechaNacimiento(),
-            usuarioRequest.getTelefono(),
-            usuarioRequest.getFoto(),
-            usuarioRequest.getPlan_seleccionado(),
-            usuarioRequest.getModalidad_plan()
-    );
-}
-
+    @PostMapping("/registro")
+    public Usuario registrarUsuario(@RequestBody UsuarioRequest usuarioRequest) {
+        return usuarioService.registrarUsuario(
+                usuarioRequest.getNombre(),
+                usuarioRequest.getApellidos(),
+                usuarioRequest.getEmail(),
+                usuarioRequest.getContrasena(),
+                usuarioRequest.getFechaNacimiento(),
+                usuarioRequest.getTelefono(),
+                usuarioRequest.getFoto(),
+                usuarioRequest.getPlan_seleccionado(),
+                usuarioRequest.getModalidad_plan());
+    }
 
     // Obtener todos los usuarios
     @GetMapping
@@ -55,16 +53,20 @@ public Usuario registrarUsuario(@RequestBody UsuarioRequest usuarioRequest) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Email o contraseña incorrectos");
         }
     }
-    @PutMapping("/{id}/actualizar")
-public ResponseEntity<?> actualizarDatosBasicos(@PathVariable String id, @RequestBody UsuarioRequest usuarioRequest) {
-    Optional<Usuario> usuarioActualizado = usuarioService.actualizarDatosBasicos(id, usuarioRequest);
 
-    if (usuarioActualizado.isPresent()) {
-        return ResponseEntity.ok(usuarioActualizado.get());
-    } else {
-        return ResponseEntity.status(HttpStatus.CONFLICT)
-                .body("El correo ya está en uso por otro usuario o el usuario no existe.");
+    @PutMapping("/{id}/actualizar")
+    public ResponseEntity<?> actualizarDatosBasicos(@PathVariable String id,
+            @RequestBody UsuarioRequest usuarioRequest) {
+        Optional<Usuario> usuarioActualizado = usuarioService.actualizarDatosBasicos(id, usuarioRequest);
+
+        if (usuarioActualizado.isPresent()) {
+            return ResponseEntity.ok(usuarioActualizado.get());
+        } else {
+            return ResponseEntity.status(HttpStatus.CONFLICT)
+                    .body("El correo ya está en uso por otro usuario o el usuario no existe.");
+        }
     }
-}
+
+    
 
 }

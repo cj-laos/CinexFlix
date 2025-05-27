@@ -32,8 +32,7 @@ public class UsuarioService {
             String telefono,
             String foto,
             String planSeleccionado,
-            String modalidadPlan
-    ) {
+            String modalidadPlan) {
         String contrasenaEncriptada = passwordEncoder.encode(contrasena);
 
         Date fechaInicioPlan = new Date(); // fecha actual
@@ -53,13 +52,13 @@ public class UsuarioService {
         Date fechaFinPlan = calendar.getTime();
 
         Usuario usuario = new Usuario(
-                null,  // id generado por MongoDB
+                null, // id generado por MongoDB
                 nombre,
                 apellidos,
                 email,
                 contrasenaEncriptada,
                 fechaNacimiento,
-                new Date(),  // fechaCreacionCuenta: hoy
+                new Date(), // fechaCreacionCuenta: hoy
                 telefono,
                 foto,
                 planSeleccionado,
@@ -89,33 +88,38 @@ public class UsuarioService {
     }
 
     public Optional<Usuario> actualizarDatosBasicos(String id, UsuarioRequest usuarioRequest) {
-    Optional<Usuario> usuarioOptional = usuarioRepository.findById(id);
+        Optional<Usuario> usuarioOptional = usuarioRepository.findById(id);
 
-    if (usuarioOptional.isEmpty()) {
-        return Optional.empty();
-    }
-
-    Usuario usuario = usuarioOptional.get();
-
-    // Validar si se quiere actualizar el email
-    if (usuarioRequest.getEmail() != null && !usuarioRequest.getEmail().equals(usuario.getEmail())) {
-        Optional<Usuario> usuarioConEmail = usuarioRepository.findByEmail(usuarioRequest.getEmail());
-        if (usuarioConEmail.isPresent() && !usuarioConEmail.get().getId().equals(id)) {
-            return Optional.empty(); // Email en uso por otro usuario
+        if (usuarioOptional.isEmpty()) {
+            return Optional.empty();
         }
-        usuario.setEmail(usuarioRequest.getEmail());
-    }
 
-    // Actualizar solo los campos permitidos
-    if (usuarioRequest.getNombre() != null) usuario.setNombre(usuarioRequest.getNombre());
-    if (usuarioRequest.getApellidos() != null) usuario.setApellidos(usuarioRequest.getApellidos());
-    if (usuarioRequest.getFoto() != null) usuario.setFoto(usuarioRequest.getFoto());
-    if (usuarioRequest.getTelefono() != null) usuario.setTelefono(usuarioRequest.getTelefono());
-    if (usuarioRequest.getContrasena() != null) usuario.setContrasena(usuarioRequest.getContrasena());    
-{
-        usuario.setContrasena(passwordEncoder.encode(usuarioRequest.getContrasena()));
+        Usuario usuario = usuarioOptional.get();
+
+        // Validar si se quiere actualizar el email
+        if (usuarioRequest.getEmail() != null && !usuarioRequest.getEmail().equals(usuario.getEmail())) {
+            Optional<Usuario> usuarioConEmail = usuarioRepository.findByEmail(usuarioRequest.getEmail());
+            if (usuarioConEmail.isPresent() && !usuarioConEmail.get().getId().equals(id)) {
+                return Optional.empty(); // Email en uso por otro usuario
+            }
+            usuario.setEmail(usuarioRequest.getEmail());
+        }
+
+        // Actualizar solo los campos permitidos
+        if (usuarioRequest.getNombre() != null)
+            usuario.setNombre(usuarioRequest.getNombre());
+        if (usuarioRequest.getApellidos() != null)
+            usuario.setApellidos(usuarioRequest.getApellidos());
+        if (usuarioRequest.getFoto() != null)
+            usuario.setFoto(usuarioRequest.getFoto());
+        if (usuarioRequest.getTelefono() != null)
+            usuario.setTelefono(usuarioRequest.getTelefono());
+        if (usuarioRequest.getContrasena() != null)
+            usuario.setContrasena(usuarioRequest.getContrasena());
+        {
+            usuario.setContrasena(passwordEncoder.encode(usuarioRequest.getContrasena()));
+        }
+        return Optional.of(usuarioRepository.save(usuario));
     }
-    return Optional.of(usuarioRepository.save(usuario));
-}
 
 }

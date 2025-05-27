@@ -16,18 +16,30 @@ public class Serie {
 
     @Id
     private String id; // ej. "SER654321"
-    
+    private String imagen;
     private String titulo;
     private String descripcion;
     private String categoria; // referencia a Categorias
-    
+    private String rating;
+    private int anioInicio;
+    private int anioFin;
     private List<Temporada> temporadas;
-    
+
     @Data
     @NoArgsConstructor
     @AllArgsConstructor
     public static class Temporada {
-        private int anioInicio;
-        private int anioFin;
+        private int numero; // Número de la temporada
+        private List<Episodio> episodios;
+    }
+
+    @Data
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class Episodio {
+        private int numero; // Número del episodio
+        private String titulo;
+        private String fecha;
+        private String rating;
     }
 }
