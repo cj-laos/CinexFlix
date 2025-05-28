@@ -21,14 +21,13 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
-            .csrf(csrf -> csrf.disable())
-            .cors(cors -> cors.configurationSource(corsConfigurationSource()))
-            .authorizeHttpRequests(auth -> auth
-                .requestMatchers(HttpMethod.POST, "/api/usuarios/**").permitAll()
-                .requestMatchers(HttpMethod.GET, "/api/usuarios/**").permitAll()
-                .requestMatchers(HttpMethod.POST, "/api/peliculas/**").permitAll() // Asegúrate de permitirlo
-                .anyRequest().permitAll()
-            );
+                .csrf(csrf -> csrf.disable())
+                .cors(cors -> cors.configurationSource(corsConfigurationSource()))
+                .authorizeHttpRequests(auth -> auth
+                        .requestMatchers(HttpMethod.POST, "/api/usuarios/**").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/api/usuarios/**").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/api/peliculas/**").permitAll() // Asegúrate de permitirlo
+                        .anyRequest().permitAll());
 
         return http.build();
     }
@@ -37,7 +36,10 @@ public class SecurityConfig {
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration config = new CorsConfiguration();
-        config.setAllowedOrigins(Arrays.asList("http://localhost:5173")); // Frontend Vite
+        config.setAllowedOrigins(Arrays.asList(
+                "http://localhost:5173", // Desarrollo local
+                "https://cineflix-dof1.vercel.app" // Producción en Vercel
+        ));        // Frontend Vite
         config.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS"));
         config.setAllowedHeaders(Arrays.asList("*"));
         config.setAllowCredentials(true); // Necesario si usas cookies o tokens
